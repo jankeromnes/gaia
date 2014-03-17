@@ -1,15 +1,14 @@
 /* -*- Mode: js; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
-/*global ActivityWindowManager, SecureWindowFactory,
-         SecureWindowManager, HomescreenLauncher,
-         FtuLauncher, SourceView, ScreenManager, Places, Activities,
-         DeveloperHUD, DialerAgent, RemoteDebugger, HomeGesture,
-         SettingsURL, SettingsListener, VisibilityManager, Storage,
-         TelephonySettings, SuspendingAppPriorityManager, TTLView,
-         MediaRecording, AppWindowFactory, SystemDialogManager,
-         applications, Rocketbar, LayoutManager, PermissionManager,
-         HomeSearchbar, SoftwareButtonManager, Accessibility */
+/* global applications, Accessibility, Activities, ActivityWindowManager,
+  AppWindowFactory, DeveloperHUD, DialerAgent, FtuLauncher, HomeGesture,
+  HomeSearchbar, HomescreenLauncher, LayoutManager, LazyLoader, MediaRecording,
+  PermissionManager, Places, RemoteDebugger, Rocketbar, ScreenManager,
+  SecureWindowFactory, SecureWindowManager, SettingsListener, SettingsURL,
+  SoftwareButtonManager, SourceView, Storage, SuspendingAppPriorityManager,
+  SystemDialogManager, TTLView, TelephonySettings, TouchOverlay,
+  VisibilityManager */
 
 'use strict';
 
@@ -122,6 +121,19 @@ window.addEventListener('load', function startup() {
   navigator.mozL10n.ready(function l10n_ready() {
     window.mediaRecording = new MediaRecording().start();
   });
+
+  SettingsListener.observe(
+    'debug.show-touches.enabled',
+    false,
+    function(enabled) {
+      if (enabled && !window.TouchOverlay) {
+        LazyLoader.load('js/devtools/touch_overlay.js', function() {
+          window.touchOverlay = new TouchOverlay();
+        });
+      }
+    }
+  );
+
 
   // We need to be sure to get the focus in order to wake up the screen
   // if the phone goes to sleep before any user interaction.
