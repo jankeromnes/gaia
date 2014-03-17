@@ -1,0 +1,14 @@
+#touch-overlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  border: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#touch-canvas {
+  opacity: 0.9;
+}
