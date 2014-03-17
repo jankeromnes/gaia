@@ -4,7 +4,6 @@
 
   /**
    * DevtoolsView displays metrics as an overlay on top of mozapps.
-   * @param {Object} data The data to update the devtools view with.
    * @class DevtoolsView
    */
   function DevtoolsView() {

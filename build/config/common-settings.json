@@ -30,6 +30,7 @@
    "debug.fps.enabled": false,
    "debug.ttl.enabled": false,
    "debug.log-animations.enabled": false,
+   "debug.show-touches.enabled": false,
    "debug.paint-flashing.enabled": false,
    "debug.peformancedata.shared": false,
    "debug.gaia.enabled": false,
