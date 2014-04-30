@@ -3,8 +3,6 @@
 (function(exports) {
 
   const SETTING = 'debug.show-touches.enabled';
-  const FADEOUT_MS = 150;
-  const REDRAW_MS = 30;
 
   /**
    * TouchOverlay gives visual touch feedback.
@@ -24,7 +22,7 @@
       }
     });
 
-    ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'resize']
+    ['touchstart', 'touchmove', 'touchend', 'touchcancel']
       .forEach(function(type) {
         window.addEventListener(type, self, true, true);
       });
@@ -33,121 +31,63 @@
   TouchOverlay.prototype = {
 
     reset: function() {
-      this._canvas = null;
-      this._context = null;
-      this._nextdraw = null;
+      this._div = null;
       this._touches = {};
-      this._zombies = {};
     },
 
     install: function() {
       var div = document.createElement('div');
       div.id = 'touch-overlay';
       div.dataset.zIndexLevel = 'touch-overlay';
-
-      var canvas = this._canvas = document.createElement('canvas');
-      canvas.id = 'touch-canvas';
-      div.appendChild(this._canvas);
-
-      this._context = canvas.getContext('2d');
-      this._installed = true;
-
       document.querySelector('#screen').appendChild(div);
+
+      this._div = div;
       this.resize();
     },
 
     remove: function() {
-      window.cancelAnimationFrame(this._animation);
-      this._canvas.parentElement.remove();
+      this._div.remove();
       this.reset();
     },
 
-    resize: function() {
-      var canvas = this._canvas;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      this.draw();
-    },
-
-    draw: function() {
-      this._nextdraw = null;
-
-      var canvas = this._canvas;
-      var context = this._context;
-
-      if (!context) {
-        return;
-      }
-
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
+    showTouch: function(touch) {
       var touches = this._touches;
-      var zombies = this._zombies;
-
-      for (var t in touches) {
-        this.drawTouch(touches[t]);
+      if (!touches[touch.identifier]) {
+        var div = document.createElement('div');
+        // TODO create touch element
+        touches[touch.identifier] = {
+          touch: touch,
+          div: div
+        };
       }
-
-      for (var z in zombies) {
-        this.drawZombie(zombies[z]);
-      }
+      // TODO CSS transition translate
     },
 
-    drawTouch: function(touch) {
-      var context = this._context;
-      context.beginPath();
-      // TODO Use Math.TAU if it becomes available one day.
-      context.arc(touch.screenX, touch.screenY, 12, 0, 2 * Math.PI, false);
-      context.fillStyle = 'white';
-      context.fill();
-      context.lineWidth = 2;
-      context.strokeStyle = 'whitesmoke';
-      context.stroke();
-    },
-
-    drawZombie: function(zombie) {
-      var life = zombie.death + FADEOUT_MS - new Date().getTime();
-      if (life <= 0) {
-        delete this._zombies[zombie.identifier];
-        return;
-      }
-
-      var context = this._context;
-      context.globalAlpha = life / FADEOUT_MS;
-      this.drawTouch(zombie);
-      context.globalAlpha = 1;
-
-      if (!this._nextdraw) {
-        this._nextdraw = window.setTimeout(this.draw, REDRAW_MS);
-      }
+    killTouch: function(touch) {
+      var touches = this._touches;
+      touches[touch.identifier].div.remove();
+      delete this._touches[touch.identifier];
     },
 
     handleEvent: function(e) {
-      if (!this._canvas) {
+      if (!this._div) {
         return;
       }
 
       var touches = this._touches;
-      var zombies = this._zombies;
 
       switch (e.type) {
-        case 'resize':
-          this.resize();
-          break;
-
         case 'touchstart':
         case 'touchmove':
           Array.prototype.forEach.call(e.changedTouches, function(touch) {
-            touches[touch.identifier] = touch;
+            // TODO showTouch(touch)
           });
           break;
 
         case 'touchend':
         case 'touchcancel':
           Array.prototype.forEach.call(e.changedTouches, function(touch) {
-            delete touches[touch.identifier];
-            touch.death = new Date().getTime();
-            zombies[touch.identifier] = touch;
+            // TODO killTouch(touch)
           });
           break;
 
