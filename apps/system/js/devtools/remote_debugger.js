@@ -3,6 +3,8 @@
 
 (function(exports) {
 
+  var _ = navigator.mozL10n.get;
+
   /**
    * RemoteDebugger displays a prompt asking the user if they want to enable
    * remote debugging on their device. This is generally called when the user
@@ -34,9 +36,22 @@
         ScreenManager.turnScreenOn();
       }
 
+      // TODO: Remove this message once Gecko is in sync
+      var text = 'remoteDebuggerMessage';
+      if (e.detail.session) {
+        var session = e.detail.session;
+        if (!session.server.port) {
+          text = 'remoteDebuggerPromptUSB';
+        } else {
+          text = {
+            raw: _('remoteDebuggerPromptTCP', session.client)
+          };
+        }
+      }
+
       // Reusing the ModalDialog infrastructure.
       ModalDialog.showWithPseudoEvent({
-        text: 'remoteDebuggerMessage',
+        text: text,
         type: 'confirm',
         callback: this._dispatchEvent.bind(this, true),
         cancel: this._dispatchEvent.bind(this, false)
