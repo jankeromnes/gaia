@@ -62,6 +62,7 @@
    "geolocation.debugging.enabled": false,
    "geolocation.enabled": true,
    "geolocation.suspended": false,
+   "geotools.gps.spoofing": false,
    "hud.logging": true,
    "hud.warnings": true,
    "hud.errors": true,

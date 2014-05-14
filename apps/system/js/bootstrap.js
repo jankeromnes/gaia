@@ -98,11 +98,12 @@ window.addEventListener('load', function startup() {
   ScreenManager.turnScreenOn();
 
   // Please sort it alphabetically
-  window.activities = new Activities();
   window.accessibility = new Accessibility();
   window.accessibility.start();
+  window.activities = new Activities();
   window.developerHUD = new DeveloperHUD();
   window.dialerAgent = new DialerAgent().start();
+  window.geolocationTools = new GeolocationTools();
   window.homeGesture = new HomeGesture().start();
   window.homeSearchbar = new HomeSearchbar();
   window.layoutManager = new LayoutManager().start();
