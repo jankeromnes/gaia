@@ -70,6 +70,7 @@
    "geolocation.debugging.gps-locations-ignored": false,
    "geolocation.enabled": true,
    "geolocation.suspended": false,
+   "geolocation.spoof": false,
    "hud.logging": true,
    "hud.warnings": true,
    "hud.errors": true,
