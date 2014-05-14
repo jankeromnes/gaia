@@ -16,7 +16,7 @@ requireApp('system/js/activities.js');
 requireApp('system/js/activity_window_factory.js');
 requireApp('system/js/activity_window_manager.js');
 requireApp('system/js/app_window_factory.js');
-requireApp('system/js/devtools_view.js');
+requireApp('system/js/devtools/developer_hud.js');
 requireApp('system/js/dialer_agent.js');
 requireApp('system/js/rocketbar.js');
 requireApp('system/js/home_searchbar.js');
@@ -52,7 +52,7 @@ mocha.globals([
   'cancelHomeTouchstart',
   'cancelHomeTouchend',
   'cancelHomeClick',
-  'devtoolsView',
+  'developerHUD',
   'dialerAgent',
   'homeGesture',
   'homeSearchbar',
