@@ -11,6 +11,7 @@
    "app.update.channel": "",
    "app.update.interval": 86400,
    "app.update.url": "",
+   "app.update.url.override": "",
    "app.update.battery-threshold.unplugged": 25,
    "app.update.battery-threshold.plugged": 25,
    "app.update.wifi-prioritized": true,
