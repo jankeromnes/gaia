@@ -82,8 +82,8 @@
 
         video.mozSrcObject = stream;
         video.play();
-      }.bind(this), function() {
-        console.log('Unable to access camera');
+      }.bind(this), function(e) {
+        console.error('Unable to access camera: ' + e);
       });
     },
 
@@ -123,8 +123,10 @@
     onHide: function(reason) {
       var video = this.dialog.video;
       video.pause();
-      video.mozSrcObject.stop();
-      video.mozSrcObject = null;
+      if (video.mozSrcObject) {
+        video.mozSrcObject.stop();
+        video.mozSrcObject = null;
+      }
       this._canvas = null;
       clearTimeout(this._captureTimeout);
       if (this._inflightURL) {
